@@ -23,19 +23,14 @@ jobs:
         with:
           go-version: '1.22'
 
-      - name: Install system dependencies
+      - name: Install Atlas CLI
         run: |
-          sudo apt-get update
-          sudo apt-get install -y gcc
-
-      - name: Install migrate CLI
-        run: |
-          CGO_ENABLED=1 go install -tags 'libsql' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
+          curl -sSf https://atlasgo.sh | sh
           # Verify the installation worked
-          migrate --version
+          ./atlas --version
 
       - name: Apply database migrations
-        run: migrate -path migrations -database "$TURSO_DB_URL?authToken=$TURSO_AUTH_TOKEN" up
+        run: ./atlas migrate apply --url "$TURSO_DB_URL?authToken=$TURSO_AUTH_TOKEN" --dir "file://migrations" --auto-approve
 
       - name: Build Go application
         run: CGO_ENABLED=0 go build -o main .

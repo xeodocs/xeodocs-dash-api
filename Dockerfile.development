@@ -8,6 +8,9 @@ RUN apt-get update && apt-get install -y \
     sqlite3 \
     # Install air for live reloading
     && go install github.com/cosmtrek/air@latest \
+    # Install Atlas CLI
+    && curl -sSf https://atlasgo.sh | sh \
+    && mv atlas /usr/local/bin/atlas \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy go.mod and go.sum first to leverage Docker cache

@@ -28,44 +28,59 @@ This project uses Docker Compose for a consistent development environment.
 *   **GET /**: Returns a welcome message.
 *   **GET /health**: Returns the health status of the service.
 
-## Database Migrations (using golang-migrate/migrate)
+## Database Migrations (using Atlas)
 
-This project uses `golang-migrate/migrate` for database migrations. The migration files are located in the `migrations` directory.
+This project uses [Atlas](https://atlasgo.io/) for database migrations. The migration files are located in the `migrations` directory.
 
 ### Installation
 
-To install the `migrate` CLI tool:
+To install the Atlas CLI tool:
 
 ```bash
-go install -tags 'sqlite3 libsql' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
+curl -sSf https://atlasgo.sh | sh
+```
+
+Alternatively, if you have Go installed:
+
+```bash
+go install ariga.io/atlas@latest
 ```
 
 ### Usage
 
-**To create a new migration:**
+Atlas uses a declarative approach to migrations. You define your desired schema, and Atlas generates the migration scripts.
+
+First, create an `atlas.hcl` configuration file in your project root (or a subdirectory).
+
+**To apply migrations:**
+
+Atlas can apply migrations directly from your `migrations` directory. For a local SQLite database (e.g., `app.db`):
 
 ```bash
-migrate create -ext sql -dir migrations -seq <migration_name>
+atlas migrate apply --url "sqlite://app.db" --dir "file://migrations"
 ```
 
-This will create two new files in the `migrations` directory: `<timestamp>_<migration_name>.up.sql` and `<timestamp>_<migration_name>.down.sql`. You should add your SQL schema changes to the `up.sql` file and the corresponding rollback SQL to the `down.sql` file.
-
-**To apply migrations (migrate up):**
+For a Turso database:
 
 ```bash
-migrate -path migrations -database "sqlite://your_database.db" up
+atlas migrate apply --url "libsql://your-db-name.turso.io?authToken=your-token" --dir "file://migrations"
 ```
 
-Replace `sqlite://your_database.db` with your actual database connection string (e.g., for Turso, it would be `libsql://your-db-name.turso.io?authToken=your-token`).
+Replace `libsql://your-db-name.turso.io?authToken=your-token` with your actual Turso database connection string.
 
-**To revert the last migration (migrate down):**
+**To create a new migration (declarative):**
+
+1.  Define your desired schema in a file (e.g., `schema.hcl`).
+2.  Run Atlas to generate a new migration file:
+
+    ```bash
+atlas migrate diff <migration_name> --dir "file://migrations" --to "file://path/to/your/schema.hcl" --url "sqlite://app.db"
+    ```
+
+    This command compares your current database schema (or a target schema file) with the desired schema and generates the necessary SQL migration script in the `migrations` directory.
+
+**To inspect the current migration state:**
 
 ```bash
-migrate -path migrations -database "sqlite://your_database.db" down 1
-```
-
-**To force a migration version (use with caution):**
-
-```bash
-migrate -path migrations -database "sqlite://your_database.db" force <version>
+atlas migrate status --url "sqlite://app.db" --dir "file://migrations"
 ```
