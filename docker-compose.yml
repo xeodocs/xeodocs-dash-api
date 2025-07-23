@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.development
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/app
+    environment:
+      # Add any environment variables needed for development here
+      # For example, if you connect to a local database
+      DATABASE_URL: "sqlite:///app/app.db"
+    # Command to run your application. You might want to use a tool like `air` for live reloading during development.
+    # For now, we'll just run the main.go file.
+    command: go run main.go
