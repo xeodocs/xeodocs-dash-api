@@ -26,8 +26,6 @@ jobs:
       - name: Install Atlas CLI
         run: |
           curl -sSf https://atlasgo.sh | sh
-          # Verify the installation worked
-          atlas --version
 
       - name: Apply database migrations
         run: atlas migrate apply --url "$TURSO_DB_URL?authToken=$TURSO_AUTH_TOKEN" --dir "file://migrations" --auto-approve
