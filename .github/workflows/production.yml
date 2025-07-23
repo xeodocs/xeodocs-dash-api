@@ -23,8 +23,16 @@ jobs:
         with:
           go-version: '1.22'
 
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc
+
       - name: Install migrate CLI
-        run: go install -tags 'libsql' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
+        run: |
+          CGO_ENABLED=1 go install -tags 'libsql' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
+          # Verify the installation worked
+          migrate --version
 
       - name: Apply database migrations
         run: migrate -path migrations -database "$TURSO_DB_URL?authToken=$TURSO_AUTH_TOKEN" up
