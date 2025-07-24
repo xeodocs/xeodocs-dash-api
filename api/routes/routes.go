@@ -4,6 +4,8 @@ import (
 	"database/sql"
 
 	"github.com/gin-gonic/gin"
+	"github.com/swaggo/files"
+	"github.com/swaggo/gin-swagger"
 	"github.com/xeodocs/xeodocs-dash-api/api/handlers"
 	"github.com/xeodocs/xeodocs-dash-api/api/middleware"
 	"github.com/xeodocs/xeodocs-dash-api/internal/repository"
@@ -37,9 +39,20 @@ func SetupRoutes(db *sql.DB) *gin.Engine {
 	r.Use(gin.Recovery())
 
 	// Health check endpoint (no auth required)
+	// HealthCheck godoc
+	// @Summary Health check
+	// @Description Check if the API service is running
+	// @Tags Health
+	// @Accept json
+	// @Produce json
+	// @Success 200 {object} map[string]string "Service is healthy"
+	// @Router /health [get]
 	r.GET("/health", func(c *gin.Context) {
 		c.JSON(200, gin.H{"status": "UP"})
 	})
+
+	// Swagger documentation endpoints
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	// API v1 routes
 	v1 := r.Group("/api/v1")

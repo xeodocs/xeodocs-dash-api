@@ -1,0 +1,935 @@
+basePath: /
+definitions:
+  models.CreatePageRequest:
+    properties:
+      description:
+        type: string
+      freeze_status:
+        type: boolean
+      markdown_content:
+        type: string
+      scheduled_publish_at:
+        type: string
+      slug:
+        type: string
+      status:
+        enum:
+        - draft
+        - translating
+        - translated
+        - ignored
+        - published
+        type: string
+      tags:
+        type: string
+      title:
+        type: string
+      website_id:
+        type: integer
+    required:
+    - description
+    - markdown_content
+    - slug
+    - status
+    - title
+    - website_id
+    type: object
+  models.CreateUserRequest:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        minLength: 6
+        type: string
+    required:
+    - email
+    - name
+    - password
+    type: object
+  models.CreateWebsiteRequest:
+    properties:
+      config:
+        type: string
+      description:
+        type: string
+      domain:
+        type: string
+      git_api_token:
+        type: string
+      git_repo_branch:
+        type: string
+      git_repo_name:
+        type: string
+      git_repo_owner:
+        type: string
+      language_code:
+        type: string
+      name:
+        type: string
+      slogan:
+        type: string
+      slug:
+        type: string
+    required:
+    - config
+    - description
+    - domain
+    - git_api_token
+    - git_repo_branch
+    - git_repo_name
+    - git_repo_owner
+    - language_code
+    - name
+    - slogan
+    - slug
+    type: object
+  models.LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  models.LoginResponse:
+    properties:
+      session_token:
+        type: string
+      user:
+        $ref: '#/definitions/models.User'
+    type: object
+  models.Page:
+    properties:
+      created_at:
+        type: string
+      description:
+        type: string
+      freeze_status:
+        type: boolean
+      id:
+        type: integer
+      last_status_change_at:
+        type: string
+      markdown_content:
+        type: string
+      scheduled_publish_at:
+        type: string
+      slug:
+        type: string
+      status:
+        type: string
+      tags:
+        type: string
+      title:
+        type: string
+      updated_at:
+        type: string
+      website_id:
+        type: integer
+    type: object
+  models.UpdatePageRequest:
+    properties:
+      description:
+        type: string
+      freeze_status:
+        type: boolean
+      markdown_content:
+        type: string
+      scheduled_publish_at:
+        type: string
+      slug:
+        type: string
+      status:
+        enum:
+        - draft
+        - translating
+        - translated
+        - ignored
+        - published
+        type: string
+      tags:
+        type: string
+      title:
+        type: string
+    type: object
+  models.UpdateUserRequest:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+    type: object
+  models.UpdateWebsiteRequest:
+    properties:
+      config:
+        type: string
+      description:
+        type: string
+      domain:
+        type: string
+      git_api_token:
+        type: string
+      git_repo_branch:
+        type: string
+      git_repo_name:
+        type: string
+      git_repo_owner:
+        type: string
+      language_code:
+        type: string
+      name:
+        type: string
+      slogan:
+        type: string
+      slug:
+        type: string
+    type: object
+  models.User:
+    properties:
+      created_at:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  models.Website:
+    properties:
+      config:
+        type: string
+      created_at:
+        type: string
+      description:
+        type: string
+      domain:
+        type: string
+      git_repo_branch:
+        type: string
+      git_repo_name:
+        type: string
+      git_repo_owner:
+        type: string
+      id:
+        type: integer
+      language_code:
+        type: string
+      name:
+        type: string
+      slogan:
+        type: string
+      slug:
+        type: string
+      updated_at:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@xeodocs.com
+    name: XeoDocs Team
+    url: http://www.xeodocs.com
+  description: RESTful API service for managing users, websites, and pages with session-based
+    authentication.
+  termsOfService: http://swagger.io/terms/
+  title: XeoDocs Dash API
+  version: "1.0"
+paths:
+  /api/v1/auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate user with email and password
+      parameters:
+      - description: Login credentials
+        in: body
+        name: credentials
+        required: true
+        schema:
+          $ref: '#/definitions/models.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Login successful
+          schema:
+            $ref: '#/definitions/models.LoginResponse'
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Invalid credentials
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: User login
+      tags:
+      - Authentication
+  /api/v1/auth/logout:
+    post:
+      consumes:
+      - application/json
+      description: Logout user and invalidate session
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Logout successful
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - Bearer: []
+      summary: User logout
+      tags:
+      - Authentication
+  /api/v1/auth/me:
+    get:
+      consumes:
+      - application/json
+      description: Get information about the currently authenticated user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Current user information
+          schema:
+            additionalProperties:
+              $ref: '#/definitions/models.User'
+            type: object
+        "401":
+          description: User not authenticated
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - Bearer: []
+      summary: Get current user
+      tags:
+      - Authentication
+  /api/v1/pages:
+    get:
+      consumes:
+      - application/json
+      description: Get list of all pages, optionally filtered by website_id
+      parameters:
+      - description: Filter by website ID
+        in: query
+        name: website_id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of pages
+          schema:
+            additionalProperties:
+              items:
+                $ref: '#/definitions/models.Page'
+              type: array
+            type: object
+        "400":
+          description: Invalid website_id parameter
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - Bearer: []
+      summary: Get all pages
+      tags:
+      - Pages
+    post:
+      consumes:
+      - application/json
+      description: Create a new page
+      parameters:
+      - description: Page creation data
+        in: body
+        name: page
+        required: true
+        schema:
+          $ref: '#/definitions/models.CreatePageRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Page created successfully
+          schema:
+            additionalProperties:
+              $ref: '#/definitions/models.Page'
+            type: object
+        "400":
+          description: Bad request or validation error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - Bearer: []
+      summary: Create new page
+      tags:
+      - Pages
+  /api/v1/pages/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a page
+      parameters:
+      - description: Page ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Page deleted successfully
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Invalid page ID
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Page not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - Bearer: []
+      summary: Delete page
+      tags:
+      - Pages
+    get:
+      consumes:
+      - application/json
+      description: Get a specific page by its ID
+      parameters:
+      - description: Page ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Page details
+          schema:
+            additionalProperties:
+              $ref: '#/definitions/models.Page'
+            type: object
+        "400":
+          description: Invalid page ID
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Page not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - Bearer: []
+      summary: Get page by ID
+      tags:
+      - Pages
+    put:
+      consumes:
+      - application/json
+      description: Update page information
+      parameters:
+      - description: Page ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Page update data
+        in: body
+        name: page
+        required: true
+        schema:
+          $ref: '#/definitions/models.UpdatePageRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Page updated successfully
+          schema:
+            additionalProperties:
+              $ref: '#/definitions/models.Page'
+            type: object
+        "400":
+          description: Bad request or validation error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Page not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - Bearer: []
+      summary: Update page
+      tags:
+      - Pages
+  /api/v1/pages/slug/{slug}:
+    get:
+      consumes:
+      - application/json
+      description: Get a specific page by its slug
+      parameters:
+      - description: Page slug
+        in: path
+        name: slug
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Page details
+          schema:
+            additionalProperties:
+              $ref: '#/definitions/models.Page'
+            type: object
+        "404":
+          description: Page not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - Bearer: []
+      summary: Get page by slug
+      tags:
+      - Pages
+  /api/v1/users:
+    get:
+      consumes:
+      - application/json
+      description: Get list of all users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of users
+          schema:
+            additionalProperties:
+              items:
+                $ref: '#/definitions/models.User'
+              type: array
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - Bearer: []
+      summary: Get all users
+      tags:
+      - Users
+    post:
+      consumes:
+      - application/json
+      description: Create a new user account
+      parameters:
+      - description: User creation data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: User created successfully
+          schema:
+            additionalProperties:
+              $ref: '#/definitions/models.User'
+            type: object
+        "400":
+          description: Bad request or validation error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - Bearer: []
+      summary: Create new user
+      tags:
+      - Users
+  /api/v1/users/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a user account
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User deleted successfully
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Invalid user ID
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: User not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - Bearer: []
+      summary: Delete user
+      tags:
+      - Users
+    get:
+      consumes:
+      - application/json
+      description: Get a specific user by their ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User details
+          schema:
+            additionalProperties:
+              $ref: '#/definitions/models.User'
+            type: object
+        "400":
+          description: Invalid user ID
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: User not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - Bearer: []
+      summary: Get user by ID
+      tags:
+      - Users
+    put:
+      consumes:
+      - application/json
+      description: Update user information
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: User update data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.UpdateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User updated successfully
+          schema:
+            additionalProperties:
+              $ref: '#/definitions/models.User'
+            type: object
+        "400":
+          description: Bad request or validation error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: User not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - Bearer: []
+      summary: Update user
+      tags:
+      - Users
+  /api/v1/websites:
+    get:
+      consumes:
+      - application/json
+      description: Get list of all websites
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of websites
+          schema:
+            additionalProperties:
+              items:
+                $ref: '#/definitions/models.Website'
+              type: array
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - Bearer: []
+      summary: Get all websites
+      tags:
+      - Websites
+    post:
+      consumes:
+      - application/json
+      description: Create a new website
+      parameters:
+      - description: Website creation data
+        in: body
+        name: website
+        required: true
+        schema:
+          $ref: '#/definitions/models.CreateWebsiteRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Website created successfully
+          schema:
+            additionalProperties:
+              $ref: '#/definitions/models.Website'
+            type: object
+        "400":
+          description: Bad request or validation error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - Bearer: []
+      summary: Create new website
+      tags:
+      - Websites
+  /api/v1/websites/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a website
+      parameters:
+      - description: Website ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Website deleted successfully
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Invalid website ID
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Website not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - Bearer: []
+      summary: Delete website
+      tags:
+      - Websites
+    get:
+      consumes:
+      - application/json
+      description: Get a specific website by its ID
+      parameters:
+      - description: Website ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Website details
+          schema:
+            additionalProperties:
+              $ref: '#/definitions/models.Website'
+            type: object
+        "400":
+          description: Invalid website ID
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Website not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - Bearer: []
+      summary: Get website by ID
+      tags:
+      - Websites
+    put:
+      consumes:
+      - application/json
+      description: Update website information
+      parameters:
+      - description: Website ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Website update data
+        in: body
+        name: website
+        required: true
+        schema:
+          $ref: '#/definitions/models.UpdateWebsiteRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Website updated successfully
+          schema:
+            additionalProperties:
+              $ref: '#/definitions/models.Website'
+            type: object
+        "400":
+          description: Bad request or validation error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Website not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - Bearer: []
+      summary: Update website
+      tags:
+      - Websites
+  /api/v1/websites/slug/{slug}:
+    get:
+      consumes:
+      - application/json
+      description: Get a specific website by its slug
+      parameters:
+      - description: Website slug
+        in: path
+        name: slug
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Website details
+          schema:
+            additionalProperties:
+              $ref: '#/definitions/models.Website'
+            type: object
+        "404":
+          description: Website not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - Bearer: []
+      summary: Get website by slug
+      tags:
+      - Websites
+schemes:
+- http
+securityDefinitions:
+  Bearer:
+    description: 'Bearer token for authentication. Format: ''Bearer {token}'''
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

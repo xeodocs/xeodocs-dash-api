@@ -17,7 +17,16 @@ func NewWebsiteHandler(websiteService *service.WebsiteService) *WebsiteHandler {
 	return &WebsiteHandler{websiteService: websiteService}
 }
 
-// GET /websites
+// GetWebsites godoc
+// @Summary Get all websites
+// @Description Get list of all websites
+// @Tags Websites
+// @Accept json
+// @Produce json
+// @Security Bearer
+// @Success 200 {object} map[string][]models.Website "List of websites"
+// @Failure 500 {object} map[string]string "Internal server error"
+// @Router /api/v1/websites [get]
 func (h *WebsiteHandler) GetWebsites(c *gin.Context) {
 	websites, err := h.websiteService.GetAllWebsites()
 	if err != nil {
@@ -28,7 +37,18 @@ func (h *WebsiteHandler) GetWebsites(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"websites": websites})
 }
 
-// GET /websites/:id
+// GetWebsite godoc
+// @Summary Get website by ID
+// @Description Get a specific website by its ID
+// @Tags Websites
+// @Accept json
+// @Produce json
+// @Security Bearer
+// @Param id path int true "Website ID"
+// @Success 200 {object} map[string]models.Website "Website details"
+// @Failure 400 {object} map[string]string "Invalid website ID"
+// @Failure 404 {object} map[string]string "Website not found"
+// @Router /api/v1/websites/{id} [get]
 func (h *WebsiteHandler) GetWebsite(c *gin.Context) {
 	idStr := c.Param("id")
 	id, err := strconv.Atoi(idStr)
@@ -46,7 +66,17 @@ func (h *WebsiteHandler) GetWebsite(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"website": website})
 }
 
-// GET /websites/slug/:slug
+// GetWebsiteBySlug godoc
+// @Summary Get website by slug
+// @Description Get a specific website by its slug
+// @Tags Websites
+// @Accept json
+// @Produce json
+// @Security Bearer
+// @Param slug path string true "Website slug"
+// @Success 200 {object} map[string]models.Website "Website details"
+// @Failure 404 {object} map[string]string "Website not found"
+// @Router /api/v1/websites/slug/{slug} [get]
 func (h *WebsiteHandler) GetWebsiteBySlug(c *gin.Context) {
 	slug := c.Param("slug")
 
@@ -59,7 +89,17 @@ func (h *WebsiteHandler) GetWebsiteBySlug(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"website": website})
 }
 
-// POST /websites
+// CreateWebsite godoc
+// @Summary Create new website
+// @Description Create a new website
+// @Tags Websites
+// @Accept json
+// @Produce json
+// @Security Bearer
+// @Param website body models.CreateWebsiteRequest true "Website creation data"
+// @Success 201 {object} map[string]models.Website "Website created successfully"
+// @Failure 400 {object} map[string]string "Bad request or validation error"
+// @Router /api/v1/websites [post]
 func (h *WebsiteHandler) CreateWebsite(c *gin.Context) {
 	var req models.CreateWebsiteRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -76,7 +116,19 @@ func (h *WebsiteHandler) CreateWebsite(c *gin.Context) {
 	c.JSON(http.StatusCreated, gin.H{"website": website})
 }
 
-// PUT /websites/:id
+// UpdateWebsite godoc
+// @Summary Update website
+// @Description Update website information
+// @Tags Websites
+// @Accept json
+// @Produce json
+// @Security Bearer
+// @Param id path int true "Website ID"
+// @Param website body models.UpdateWebsiteRequest true "Website update data"
+// @Success 200 {object} map[string]models.Website "Website updated successfully"
+// @Failure 400 {object} map[string]string "Bad request or validation error"
+// @Failure 404 {object} map[string]string "Website not found"
+// @Router /api/v1/websites/{id} [put]
 func (h *WebsiteHandler) UpdateWebsite(c *gin.Context) {
 	idStr := c.Param("id")
 	id, err := strconv.Atoi(idStr)
@@ -100,7 +152,18 @@ func (h *WebsiteHandler) UpdateWebsite(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"website": website})
 }
 
-// DELETE /websites/:id
+// DeleteWebsite godoc
+// @Summary Delete website
+// @Description Delete a website
+// @Tags Websites
+// @Accept json
+// @Produce json
+// @Security Bearer
+// @Param id path int true "Website ID"
+// @Success 200 {object} map[string]string "Website deleted successfully"
+// @Failure 400 {object} map[string]string "Invalid website ID"
+// @Failure 404 {object} map[string]string "Website not found"
+// @Router /api/v1/websites/{id} [delete]
 func (h *WebsiteHandler) DeleteWebsite(c *gin.Context) {
 	idStr := c.Param("id")
 	id, err := strconv.Atoi(idStr)

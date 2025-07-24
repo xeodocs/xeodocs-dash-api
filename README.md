@@ -41,6 +41,67 @@ To add a new migration file using the Atlas tool, follow these steps:
 
 These steps will help you manage database schema changes effectively using Atlas.
 
+## Swagger/OpenAPI Documentation
+
+The API includes auto-generated Swagger/OpenAPI documentation that provides interactive API exploration and testing capabilities.
+
+### Accessing Swagger UI
+
+Once the server is running, you can access the Swagger UI at:
+
+```
+http://localhost:8080/swagger/index.html
+```
+
+The Swagger UI provides:
+- Interactive API documentation
+- Request/response examples
+- Authentication testing (Bearer token support)
+- Model schemas for all data structures
+
+### Generating Documentation
+
+The Swagger documentation is auto-generated from code annotations using `swaggo/swag`.
+
+#### Manual Generation (Development)
+
+If you need to manually regenerate the documentation after making changes to API annotations:
+
+1. **Install the swag CLI tool** (if not already installed):
+   ```bash
+   go install github.com/swaggo/swag/cmd/swag@latest
+   ```
+
+2. **Generate the documentation**:
+   ```bash
+   swag init -g cmd/api/main.go -o docs
+   ```
+
+   This will update the files in the `docs/` directory:
+   - `docs.go` - Generated Go code
+   - `swagger.json` - OpenAPI JSON specification
+   - `swagger.yaml` - OpenAPI YAML specification
+
+#### Automatic Generation (Production)
+
+For production deployments, the documentation generation should be integrated into your CI/CD pipeline:
+
+```bash
+# In your build script or Dockerfile
+RUN go install github.com/swaggo/swag/cmd/swag@latest
+RUN swag init -g cmd/api/main.go -o docs
+RUN go build -o app cmd/api/main.go
+```
+
+### Documentation Features
+
+- **Authentication**: All protected endpoints show the Bearer token requirement
+- **Request/Response Models**: Complete schemas for all data structures
+- **Error Responses**: Documented error codes and messages
+- **Query Parameters**: Support for filtering (e.g., pages by website_id)
+- **Path Parameters**: ID and slug-based lookups
+- **Tags**: Endpoints organized by resource type (Authentication, Users, Websites, Pages, Health)
+
 ## API Endpoints
 
 The API provides comprehensive CRUD operations for users, websites, and pages with session-based authentication.
