@@ -4,13 +4,11 @@ WORKDIR /app
 
 # Install tools for development (e.g., git, sqlite3, air for live reloading)
 RUN apt-get update && apt-get install -y \
-    git \
-    sqlite3 \
     # Install air for live reloading
-    && go install github.com/cosmtrek/air@latest \
+    && go install github.com/air-verse/air@latest \
     # Install Atlas CLI
     && curl -sSf https://atlasgo.sh | sh \
-    && mv atlas /usr/local/bin/atlas \
+    && find /root -name atlas -exec mv {} /usr/local/bin/atlas \; \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy go.mod and go.sum first to leverage Docker cache
@@ -24,6 +22,7 @@ COPY . .
 EXPOSE 8080
 
 # Command to run the application (e.g., with air for live reloading)
-# CMD ["air"]
-# For now, we'll use a simple go run command, but air is recommended for dev
-CMD ["go", "run", "main.go"]
+# Apply Atlas migrations
+RUN atlas migrate apply --url "sqlite:///local.db" --dir "file://migrations"
+
+CMD ["air"]
