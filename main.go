@@ -13,7 +13,7 @@ var db *sql.DB
 
 func main() {
 	var err error
-	databaseURL := "sqlite:///app/local/db.db" // Get this from docker-compose.yml
+	databaseURL := "sqlite://../local/db.db" // Get this from docker-compose.yml
 	db, err = sql.Open("sqlite3", databaseURL)
 	if err != nil {
 		log.Fatalf("Failed to open database: %v", err)
