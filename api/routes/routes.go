@@ -53,6 +53,14 @@ func SetupRoutes(db *sql.DB) *gin.Engine {
 
 	// Swagger documentation endpoints
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	// Simple redirect from /swagger to /swagger/index.html
+	r.GET("/swagger", func(c *gin.Context) {
+		c.Redirect(302, "/swagger/index.html")
+	})
+	// Alternative Swagger UI endpoint for testing
+	r.GET("/docs", func(c *gin.Context) {
+		c.Redirect(302, "/swagger/index.html")
+	})
 
 	// API v1 routes
 	v1 := r.Group("/api/v1")

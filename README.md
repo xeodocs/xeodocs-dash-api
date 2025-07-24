@@ -82,16 +82,21 @@ If you need to manually regenerate the documentation after making changes to API
    - `swagger.json` - OpenAPI JSON specification
    - `swagger.yaml` - OpenAPI YAML specification
 
-#### Automatic Generation (Production)
+#### Automatic Generation (Docker & CI/CD)
 
-For production deployments, the documentation generation should be integrated into your CI/CD pipeline:
+The Swagger documentation is automatically generated in both development and production environments:
 
-```bash
-# In your build script or Dockerfile
-RUN go install github.com/swaggo/swag/cmd/swag@latest
-RUN swag init -g cmd/api/main.go -o docs
-RUN go build -o app cmd/api/main.go
-```
+**Development (Docker Compose):**
+The documentation is automatically generated when you run `docker compose up --build`. The process includes:
+1. Installing the Swagger CLI tool in the development container
+2. Generating documentation before starting the development server
+3. Documentation is available immediately at startup
+
+**Production (GitHub Actions & Docker):**
+The production deployment automatically generates documentation through:
+1. **GitHub Actions Workflow**: Installs Swagger CLI and generates docs during the CI/CD pipeline
+2. **Production Dockerfile**: Includes Swagger generation as part of the build process
+3. **Multi-stage Build**: Ensures documentation is generated before creating the final production image
 
 ### Documentation Features
 

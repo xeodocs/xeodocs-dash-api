@@ -9,6 +9,8 @@ RUN apt-get update && apt-get install -y \
     # Install Atlas CLI
     && curl -sSf https://atlasgo.sh | sh \
     && find /root -name atlas -exec mv {} /usr/local/bin/atlas \; \
+    # Install Swagger CLI for documentation generation
+    && go install github.com/swaggo/swag/cmd/swag@latest \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy go.mod and go.sum first to leverage Docker cache
