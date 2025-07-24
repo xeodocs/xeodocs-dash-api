@@ -26,6 +26,7 @@ go.work.sum
 
 # tmp
 tmp/
+local/
 
 # env file
 .env
@@ -33,6 +34,3 @@ tmp/
 # Editor/IDE
 # .idea/
 # .vscode/
-
-# Local database
-local.db

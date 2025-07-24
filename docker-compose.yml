@@ -7,8 +7,15 @@ services:
       - "8080:8080"
     volumes:
       - .:/app
+      - db_data:/app/local
     environment:
       # Add any environment variables needed for development here
       # For example, if you connect to a local database
-      DATABASE_URL: "sqlite:///app/local.db"
+      DATABASE_URL: "sqlite:///app/local/db.db"
+    command: >
+      sh -c "atlas migrate hash --dir file://migrations &&
+             atlas migrate apply --url sqlite:///app/local/db.db --dir file://migrations &&
+             air"
 
+volumes:
+  db_data:

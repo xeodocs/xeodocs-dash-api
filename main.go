@@ -13,7 +13,7 @@ var db *sql.DB
 
 func main() {
 	var err error
-	databaseURL := "sqlite:///app/local.db" // Get this from docker-compose.yml
+	databaseURL := "sqlite:///app/local/db.db" // Get this from docker-compose.yml
 	db, err = sql.Open("sqlite3", databaseURL)
 	if err != nil {
 		log.Fatalf("Failed to open database: %v", err)
@@ -23,7 +23,7 @@ func main() {
 	// Ping the database to ensure connection is established
 	err = db.Ping()
 	if err != nil {
-		log.Fatalf("Failed to connect to database: %v", err)
+		log.Fatalf("Failed to connect to database: %v %v", err, databaseURL)
 	}
 	log.Println("Successfully connected to SQLite database!")
 
@@ -37,7 +37,7 @@ func main() {
 			return
 		}
 		c.JSON(http.StatusOK, gin.H{
-			"message": "Hello, world!!",
+			"message":          "Hello, world!!",
 			"first_user_email": email,
 		})
 	})

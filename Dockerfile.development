@@ -22,7 +22,4 @@ COPY . .
 EXPOSE 8080
 
 # Command to run the application (e.g., with air for live reloading)
-# Apply Atlas migrations
-RUN atlas migrate apply --url "sqlite:///local.db" --dir "file://migrations"
-
 CMD ["air"]
