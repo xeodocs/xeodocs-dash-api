@@ -42,7 +42,7 @@ jobs:
         run: atlas migrate apply --url "$TURSO_DB_URL?authToken=$TURSO_AUTH_TOKEN" --dir "file://migrations"
 
       - name: Build Go application
-        run: CGO_ENABLED=0 go build -o main cmd/api/main.go
+        run: go build -o main cmd/api/main.go
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
