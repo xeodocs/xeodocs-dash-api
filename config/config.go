@@ -2,6 +2,7 @@ package config
 
 import (
 	"os"
+	"strings"
 )
 
 type Config struct {
@@ -17,6 +18,9 @@ func Load() *Config {
 	var databaseURL string
 	if env == "prod" {
 		databaseURL = getEnv("TURSO_DB_URL", "")
+		if databaseURL != "" && !strings.HasPrefix(databaseURL, "libsql://") && !strings.HasPrefix(databaseURL, "file://") && !strings.HasPrefix(databaseURL, "https://") && !strings.HasPrefix(databaseURL, "http://") && !strings.HasPrefix(databaseURL, "wss://") && !strings.HasPrefix(databaseURL, "ws://") {
+			databaseURL = "libsql://" + databaseURL
+		}
 	} else {
 		databaseURL = "sqlite://./local/db.db"
 	}

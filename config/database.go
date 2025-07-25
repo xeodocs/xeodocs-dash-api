@@ -17,7 +17,8 @@ func InitDatabase(cfg *Config) (*sql.DB, error) {
 	if cfg.Environment == "prod" {
 		// For production, use Turso
 		log.Println("Connecting to Turso database...")
-		db, err = sql.Open("libsql", fmt.Sprintf("%s?authToken=%s", cfg.DatabaseURL, cfg.TursoAuthToken))
+		dbPath := strings.TrimPrefix(cfg.DatabaseURL, "libsql://")
+		db, err = sql.Open("libsql", fmt.Sprintf("%s?authToken=%s", dbPath, cfg.TursoAuthToken))
 	} else {
 		// For development, use SQLite
 		log.Println("Connecting to SQLite database...")
