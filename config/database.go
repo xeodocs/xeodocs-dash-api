@@ -14,13 +14,12 @@ func InitDatabase(cfg *Config) (*sql.DB, error) {
 	var err error
 
 	if cfg.Environment == "prod" {
-		// For production, we'll use SQLite for now
-		// In a real deployment, you would configure Turso properly
-		log.Println("Warning: Production mode using SQLite. Configure Turso for production.")
-		dbPath := "../local/db.db"
-		db, err = sql.Open("sqlite3", dbPath)
+		// For production, use Turso
+		log.Println("Connecting to Turso database...")
+		db, err = sql.Open("libsql", fmt.Sprintf("%s?authToken=%s", cfg.DatabaseURL, cfg.TursoAuthToken))
 	} else {
-		// For SQLite connection (remove sqlite:// prefix)
+		// For development, use SQLite
+		log.Println("Connecting to SQLite database...")
 		dbPath := strings.TrimPrefix(cfg.DatabaseURL, "sqlite://")
 		db, err = sql.Open("sqlite3", dbPath)
 	}

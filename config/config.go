@@ -13,10 +13,10 @@ type Config struct {
 
 func Load() *Config {
 	env := getEnv("ENVIRONMENT", "dev")
-	
+
 	var databaseURL string
 	if env == "prod" {
-		databaseURL = "libsql://xeodocs-db-xeodocs.aws-us-east-1.turso.io"
+		databaseURL = getEnv("TURSO_DB_URL", "")
 	} else {
 		databaseURL = "sqlite://./local/db.db"
 	}
