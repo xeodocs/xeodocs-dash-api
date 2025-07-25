@@ -27,7 +27,7 @@ func NewUserHandler(userService *service.UserService) *UserHandler {
 // @Success 200 {object} models.LoginResponse "Login successful"
 // @Failure 400 {object} map[string]string "Bad request"
 // @Failure 401 {object} map[string]string "Invalid credentials"
-// @Router /api/v1/auth/login [post]
+// @Router /auth/login [post]
 func (h *UserHandler) Login(c *gin.Context) {
 	var req models.LoginRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -54,7 +54,7 @@ func (h *UserHandler) Login(c *gin.Context) {
 // @Success 200 {object} map[string]string "Logout successful"
 // @Failure 400 {object} map[string]string "Bad request"
 // @Failure 500 {object} map[string]string "Internal server error"
-// @Router /api/v1/auth/logout [post]
+// @Router /auth/logout [post]
 func (h *UserHandler) Logout(c *gin.Context) {
 	authHeader := c.GetHeader("Authorization")
 	if authHeader == "" {
@@ -83,7 +83,7 @@ func (h *UserHandler) Logout(c *gin.Context) {
 // @Security Bearer
 // @Success 200 {object} map[string][]models.User "List of users"
 // @Failure 500 {object} map[string]string "Internal server error"
-// @Router /api/v1/users [get]
+// @Router /users [get]
 func (h *UserHandler) GetUsers(c *gin.Context) {
 	users, err := h.userService.GetAllUsers()
 	if err != nil {
@@ -105,7 +105,7 @@ func (h *UserHandler) GetUsers(c *gin.Context) {
 // @Success 200 {object} map[string]models.User "User details"
 // @Failure 400 {object} map[string]string "Invalid user ID"
 // @Failure 404 {object} map[string]string "User not found"
-// @Router /api/v1/users/{id} [get]
+// @Router /users/{id} [get]
 func (h *UserHandler) GetUser(c *gin.Context) {
 	idStr := c.Param("id")
 	id, err := strconv.Atoi(idStr)
@@ -133,7 +133,7 @@ func (h *UserHandler) GetUser(c *gin.Context) {
 // @Param user body models.CreateUserRequest true "User creation data"
 // @Success 201 {object} map[string]models.User "User created successfully"
 // @Failure 400 {object} map[string]string "Bad request or validation error"
-// @Router /api/v1/users [post]
+// @Router /users [post]
 func (h *UserHandler) CreateUser(c *gin.Context) {
 	var req models.CreateUserRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -162,7 +162,7 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 // @Success 200 {object} map[string]models.User "User updated successfully"
 // @Failure 400 {object} map[string]string "Bad request or validation error"
 // @Failure 404 {object} map[string]string "User not found"
-// @Router /api/v1/users/{id} [put]
+// @Router /users/{id} [put]
 func (h *UserHandler) UpdateUser(c *gin.Context) {
 	idStr := c.Param("id")
 	id, err := strconv.Atoi(idStr)
@@ -197,7 +197,7 @@ func (h *UserHandler) UpdateUser(c *gin.Context) {
 // @Success 200 {object} map[string]string "User deleted successfully"
 // @Failure 400 {object} map[string]string "Invalid user ID"
 // @Failure 404 {object} map[string]string "User not found"
-// @Router /api/v1/users/{id} [delete]
+// @Router /users/{id} [delete]
 func (h *UserHandler) DeleteUser(c *gin.Context) {
 	idStr := c.Param("id")
 	id, err := strconv.Atoi(idStr)
@@ -224,7 +224,7 @@ func (h *UserHandler) DeleteUser(c *gin.Context) {
 // @Security Bearer
 // @Success 200 {object} map[string]models.User "Current user information"
 // @Failure 401 {object} map[string]string "User not authenticated"
-// @Router /api/v1/auth/me [get]
+// @Router /auth/me [get]
 func (h *UserHandler) GetCurrentUser(c *gin.Context) {
 	user, exists := c.Get("user")
 	if !exists {

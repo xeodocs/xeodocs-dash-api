@@ -20,7 +20,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/v1/auth/login": {
+        "/auth/login": {
             "post": {
                 "description": "Authenticate user with email and password",
                 "consumes": [
@@ -72,7 +72,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/auth/logout": {
+        "/auth/logout": {
             "post": {
                 "security": [
                     {
@@ -121,7 +121,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/auth/me": {
+        "/auth/me": {
             "get": {
                 "security": [
                     {
@@ -161,14 +161,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/pages": {
+        "/pages": {
             "get": {
                 "security": [
                     {
                         "Bearer": []
                     }
                 ],
-                "description": "Get list of all pages, optionally filtered by website_id",
+                "description": "Get list of all pages, optionally filtered by websiteId",
                 "consumes": [
                     "application/json"
                 ],
@@ -183,7 +183,7 @@ const docTemplate = `{
                     {
                         "type": "integer",
                         "description": "Filter by website ID",
-                        "name": "website_id",
+                        "name": "websiteId",
                         "in": "query"
                     }
                 ],
@@ -201,7 +201,7 @@ const docTemplate = `{
                         }
                     },
                     "400": {
-                        "description": "Invalid website_id parameter",
+                        "description": "Invalid websiteId parameter",
                         "schema": {
                             "type": "object",
                             "additionalProperties": {
@@ -270,7 +270,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/pages/slug/{slug}": {
+        "/pages/slug/{slug}": {
             "get": {
                 "security": [
                     {
@@ -319,7 +319,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/pages/{id}": {
+        "/pages/{id}": {
             "get": {
                 "security": [
                     {
@@ -498,7 +498,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/users": {
+        "/users": {
             "get": {
                 "security": [
                     {
@@ -590,7 +590,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/users/{id}": {
+        "/users/{id}": {
             "get": {
                 "security": [
                     {
@@ -769,7 +769,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/websites": {
+        "/websites": {
             "get": {
                 "security": [
                     {
@@ -861,7 +861,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/websites/slug/{slug}": {
+        "/websites/slug/{slug}": {
             "get": {
                 "security": [
                     {
@@ -910,7 +910,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/websites/{id}": {
+        "/websites/{id}": {
             "get": {
                 "security": [
                     {
@@ -1095,23 +1095,23 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "description",
-                "markdown_content",
+                "markdownContent",
                 "slug",
                 "status",
                 "title",
-                "website_id"
+                "websiteId"
             ],
             "properties": {
                 "description": {
                     "type": "string"
                 },
-                "freeze_status": {
+                "freezeStatus": {
                     "type": "boolean"
                 },
-                "markdown_content": {
+                "markdownContent": {
                     "type": "string"
                 },
-                "scheduled_publish_at": {
+                "scheduledPublishAt": {
                     "type": "string"
                 },
                 "slug": {
@@ -1133,7 +1133,7 @@ const docTemplate = `{
                 "title": {
                     "type": "string"
                 },
-                "website_id": {
+                "websiteId": {
                     "type": "integer"
                 }
             }
@@ -1164,11 +1164,11 @@ const docTemplate = `{
                 "config",
                 "description",
                 "domain",
-                "git_api_token",
-                "git_repo_branch",
-                "git_repo_name",
-                "git_repo_owner",
-                "language_code",
+                "gitApiToken",
+                "gitRepoBranch",
+                "gitRepoName",
+                "gitRepoOwner",
+                "languageCode",
                 "name",
                 "slogan",
                 "slug"
@@ -1183,19 +1183,19 @@ const docTemplate = `{
                 "domain": {
                     "type": "string"
                 },
-                "git_api_token": {
+                "gitApiToken": {
                     "type": "string"
                 },
-                "git_repo_branch": {
+                "gitRepoBranch": {
                     "type": "string"
                 },
-                "git_repo_name": {
+                "gitRepoName": {
                     "type": "string"
                 },
-                "git_repo_owner": {
+                "gitRepoOwner": {
                     "type": "string"
                 },
-                "language_code": {
+                "languageCode": {
                     "type": "string"
                 },
                 "name": {
@@ -1227,7 +1227,7 @@ const docTemplate = `{
         "models.LoginResponse": {
             "type": "object",
             "properties": {
-                "session_token": {
+                "sessionToken": {
                     "type": "string"
                 },
                 "user": {
@@ -1238,25 +1238,25 @@ const docTemplate = `{
         "models.Page": {
             "type": "object",
             "properties": {
-                "created_at": {
+                "createdAt": {
                     "type": "string"
                 },
                 "description": {
                     "type": "string"
                 },
-                "freeze_status": {
+                "freezeStatus": {
                     "type": "boolean"
                 },
                 "id": {
                     "type": "integer"
                 },
-                "last_status_change_at": {
+                "lastStatusChangeAt": {
                     "type": "string"
                 },
-                "markdown_content": {
+                "markdownContent": {
                     "type": "string"
                 },
-                "scheduled_publish_at": {
+                "scheduledPublishAt": {
                     "type": "string"
                 },
                 "slug": {
@@ -1271,10 +1271,10 @@ const docTemplate = `{
                 "title": {
                     "type": "string"
                 },
-                "updated_at": {
+                "updatedAt": {
                     "type": "string"
                 },
-                "website_id": {
+                "websiteId": {
                     "type": "integer"
                 }
             }
@@ -1285,13 +1285,13 @@ const docTemplate = `{
                 "description": {
                     "type": "string"
                 },
-                "freeze_status": {
+                "freezeStatus": {
                     "type": "boolean"
                 },
-                "markdown_content": {
+                "markdownContent": {
                     "type": "string"
                 },
-                "scheduled_publish_at": {
+                "scheduledPublishAt": {
                     "type": "string"
                 },
                 "slug": {
@@ -1338,19 +1338,19 @@ const docTemplate = `{
                 "domain": {
                     "type": "string"
                 },
-                "git_api_token": {
+                "gitApiToken": {
                     "type": "string"
                 },
-                "git_repo_branch": {
+                "gitRepoBranch": {
                     "type": "string"
                 },
-                "git_repo_name": {
+                "gitRepoName": {
                     "type": "string"
                 },
-                "git_repo_owner": {
+                "gitRepoOwner": {
                     "type": "string"
                 },
-                "language_code": {
+                "languageCode": {
                     "type": "string"
                 },
                 "name": {
@@ -1367,7 +1367,7 @@ const docTemplate = `{
         "models.User": {
             "type": "object",
             "properties": {
-                "created_at": {
+                "createdAt": {
                     "type": "string"
                 },
                 "email": {
@@ -1379,7 +1379,7 @@ const docTemplate = `{
                 "name": {
                     "type": "string"
                 },
-                "updated_at": {
+                "updatedAt": {
                     "type": "string"
                 }
             }
@@ -1390,7 +1390,7 @@ const docTemplate = `{
                 "config": {
                     "type": "string"
                 },
-                "created_at": {
+                "createdAt": {
                     "type": "string"
                 },
                 "description": {
@@ -1399,19 +1399,19 @@ const docTemplate = `{
                 "domain": {
                     "type": "string"
                 },
-                "git_repo_branch": {
+                "gitRepoBranch": {
                     "type": "string"
                 },
-                "git_repo_name": {
+                "gitRepoName": {
                     "type": "string"
                 },
-                "git_repo_owner": {
+                "gitRepoOwner": {
                     "type": "string"
                 },
                 "id": {
                     "type": "integer"
                 },
-                "language_code": {
+                "languageCode": {
                     "type": "string"
                 },
                 "name": {
@@ -1423,7 +1423,7 @@ const docTemplate = `{
                 "slug": {
                     "type": "string"
                 },
-                "updated_at": {
+                "updatedAt": {
                     "type": "string"
                 }
             }

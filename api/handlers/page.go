@@ -19,23 +19,23 @@ func NewPageHandler(pageService *service.PageService) *PageHandler {
 
 // GetPages godoc
 // @Summary Get all pages
-// @Description Get list of all pages, optionally filtered by website_id
+// @Description Get list of all pages, optionally filtered by websiteId
 // @Tags Pages
 // @Accept json
 // @Produce json
 // @Security Bearer
-// @Param website_id query int false "Filter by website ID"
+// @Param websiteId query int false "Filter by website ID"
 // @Success 200 {object} map[string][]models.Page "List of pages"
-// @Failure 400 {object} map[string]string "Invalid website_id parameter"
+// @Failure 400 {object} map[string]string "Invalid websiteId parameter"
 // @Failure 500 {object} map[string]string "Internal server error"
-// @Router /api/v1/pages [get]
+// @Router /pages [get]
 func (h *PageHandler) GetPages(c *gin.Context) {
-	// Check if filtering by website_id
-	websiteIDStr := c.Query("website_id")
+	// Check if filtering by websiteId
+	websiteIDStr := c.Query("websiteId")
 	if websiteIDStr != "" {
 		websiteID, err := strconv.Atoi(websiteIDStr)
 		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid website_id parameter"})
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid websiteId parameter"})
 			return
 		}
 
@@ -69,7 +69,7 @@ func (h *PageHandler) GetPages(c *gin.Context) {
 // @Success 200 {object} map[string]models.Page "Page details"
 // @Failure 400 {object} map[string]string "Invalid page ID"
 // @Failure 404 {object} map[string]string "Page not found"
-// @Router /api/v1/pages/{id} [get]
+// @Router /pages/{id} [get]
 func (h *PageHandler) GetPage(c *gin.Context) {
 	idStr := c.Param("id")
 	id, err := strconv.Atoi(idStr)
@@ -97,7 +97,7 @@ func (h *PageHandler) GetPage(c *gin.Context) {
 // @Param slug path string true "Page slug"
 // @Success 200 {object} map[string]models.Page "Page details"
 // @Failure 404 {object} map[string]string "Page not found"
-// @Router /api/v1/pages/slug/{slug} [get]
+// @Router /pages/slug/{slug} [get]
 func (h *PageHandler) GetPageBySlug(c *gin.Context) {
 	slug := c.Param("slug")
 
@@ -120,7 +120,7 @@ func (h *PageHandler) GetPageBySlug(c *gin.Context) {
 // @Param page body models.CreatePageRequest true "Page creation data"
 // @Success 201 {object} map[string]models.Page "Page created successfully"
 // @Failure 400 {object} map[string]string "Bad request or validation error"
-// @Router /api/v1/pages [post]
+// @Router /pages [post]
 func (h *PageHandler) CreatePage(c *gin.Context) {
 	var req models.CreatePageRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -149,7 +149,7 @@ func (h *PageHandler) CreatePage(c *gin.Context) {
 // @Success 200 {object} map[string]models.Page "Page updated successfully"
 // @Failure 400 {object} map[string]string "Bad request or validation error"
 // @Failure 404 {object} map[string]string "Page not found"
-// @Router /api/v1/pages/{id} [put]
+// @Router /pages/{id} [put]
 func (h *PageHandler) UpdatePage(c *gin.Context) {
 	idStr := c.Param("id")
 	id, err := strconv.Atoi(idStr)
@@ -184,7 +184,7 @@ func (h *PageHandler) UpdatePage(c *gin.Context) {
 // @Success 200 {object} map[string]string "Page deleted successfully"
 // @Failure 400 {object} map[string]string "Invalid page ID"
 // @Failure 404 {object} map[string]string "Page not found"
-// @Router /api/v1/pages/{id} [delete]
+// @Router /pages/{id} [delete]
 func (h *PageHandler) DeletePage(c *gin.Context) {
 	idStr := c.Param("id")
 	id, err := strconv.Atoi(idStr)

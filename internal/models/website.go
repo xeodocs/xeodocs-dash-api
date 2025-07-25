@@ -11,14 +11,14 @@ type Website struct {
 	Description    string    `json:"description" db:"description"`
 	Slogan         string    `json:"slogan" db:"slogan"`
 	Domain         string    `json:"domain" db:"domain"`
-	GitRepoOwner   string    `json:"git_repo_owner" db:"git_repo_owner"`
-	GitRepoName    string    `json:"git_repo_name" db:"git_repo_name"`
-	GitRepoBranch  string    `json:"git_repo_branch" db:"git_repo_branch"`
+	GitRepoOwner   string    `json:"gitRepoOwner" db:"git_repo_owner"`
+	GitRepoName    string    `json:"gitRepoName" db:"git_repo_name"`
+	GitRepoBranch  string    `json:"gitRepoBranch" db:"git_repo_branch"`
 	GitAPIToken    string    `json:"-" db:"git_api_token"`
 	Config         string    `json:"config" db:"config"`
-	LanguageCode   string    `json:"language_code" db:"language_code"`
-	CreatedAt      time.Time `json:"created_at" db:"created_at"`
-	UpdatedAt      time.Time `json:"updated_at" db:"updated_at"`
+	LanguageCode   string    `json:"languageCode" db:"language_code"`
+	CreatedAt      time.Time `json:"createdAt" db:"created_at"`
+	UpdatedAt      time.Time `json:"updatedAt" db:"updated_at"`
 }
 
 // Request/Response DTOs
@@ -28,12 +28,12 @@ type CreateWebsiteRequest struct {
 	Description   string `json:"description" binding:"required"`
 	Slogan        string `json:"slogan" binding:"required"`
 	Domain        string `json:"domain" binding:"required"`
-	GitRepoOwner  string `json:"git_repo_owner" binding:"required"`
-	GitRepoName   string `json:"git_repo_name" binding:"required"`
-	GitRepoBranch string `json:"git_repo_branch" binding:"required"`
-	GitAPIToken   string `json:"git_api_token" binding:"required"`
+	GitRepoOwner  string `json:"gitRepoOwner" binding:"required"`
+	GitRepoName   string `json:"gitRepoName" binding:"required"`
+	GitRepoBranch string `json:"gitRepoBranch" binding:"required"`
+	GitAPIToken   string `json:"gitApiToken" binding:"required"`
 	Config        string `json:"config" binding:"required"`
-	LanguageCode  string `json:"language_code" binding:"required,len=2"`
+	LanguageCode  string `json:"languageCode" binding:"required,len=2"`
 }
 
 type UpdateWebsiteRequest struct {
@@ -42,10 +42,10 @@ type UpdateWebsiteRequest struct {
 	Description   string `json:"description" binding:"omitempty"`
 	Slogan        string `json:"slogan" binding:"omitempty"`
 	Domain        string `json:"domain" binding:"omitempty"`
-	GitRepoOwner  string `json:"git_repo_owner" binding:"omitempty"`
-	GitRepoName   string `json:"git_repo_name" binding:"omitempty"`
-	GitRepoBranch string `json:"git_repo_branch" binding:"omitempty"`
-	GitAPIToken   string `json:"git_api_token" binding:"omitempty"`
+	GitRepoOwner  string `json:"gitRepoOwner" binding:"omitempty"`
+	GitRepoName   string `json:"gitRepoName" binding:"omitempty"`
+	GitRepoBranch string `json:"gitRepoBranch" binding:"omitempty"`
+	GitAPIToken   string `json:"gitApiToken" binding:"omitempty"`
 	Config        string `json:"config" binding:"omitempty"`
-	LanguageCode  string `json:"language_code" binding:"omitempty,len=2"`
+	LanguageCode  string `json:"languageCode" binding:"omitempty,len=2"`
 }

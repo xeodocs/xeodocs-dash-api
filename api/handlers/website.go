@@ -26,7 +26,7 @@ func NewWebsiteHandler(websiteService *service.WebsiteService) *WebsiteHandler {
 // @Security Bearer
 // @Success 200 {object} map[string][]models.Website "List of websites"
 // @Failure 500 {object} map[string]string "Internal server error"
-// @Router /api/v1/websites [get]
+// @Router /websites [get]
 func (h *WebsiteHandler) GetWebsites(c *gin.Context) {
 	websites, err := h.websiteService.GetAllWebsites()
 	if err != nil {
@@ -48,7 +48,7 @@ func (h *WebsiteHandler) GetWebsites(c *gin.Context) {
 // @Success 200 {object} map[string]models.Website "Website details"
 // @Failure 400 {object} map[string]string "Invalid website ID"
 // @Failure 404 {object} map[string]string "Website not found"
-// @Router /api/v1/websites/{id} [get]
+// @Router /websites/{id} [get]
 func (h *WebsiteHandler) GetWebsite(c *gin.Context) {
 	idStr := c.Param("id")
 	id, err := strconv.Atoi(idStr)
@@ -76,7 +76,7 @@ func (h *WebsiteHandler) GetWebsite(c *gin.Context) {
 // @Param slug path string true "Website slug"
 // @Success 200 {object} map[string]models.Website "Website details"
 // @Failure 404 {object} map[string]string "Website not found"
-// @Router /api/v1/websites/slug/{slug} [get]
+// @Router /websites/slug/{slug} [get]
 func (h *WebsiteHandler) GetWebsiteBySlug(c *gin.Context) {
 	slug := c.Param("slug")
 
@@ -99,7 +99,7 @@ func (h *WebsiteHandler) GetWebsiteBySlug(c *gin.Context) {
 // @Param website body models.CreateWebsiteRequest true "Website creation data"
 // @Success 201 {object} map[string]models.Website "Website created successfully"
 // @Failure 400 {object} map[string]string "Bad request or validation error"
-// @Router /api/v1/websites [post]
+// @Router /websites [post]
 func (h *WebsiteHandler) CreateWebsite(c *gin.Context) {
 	var req models.CreateWebsiteRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -128,7 +128,7 @@ func (h *WebsiteHandler) CreateWebsite(c *gin.Context) {
 // @Success 200 {object} map[string]models.Website "Website updated successfully"
 // @Failure 400 {object} map[string]string "Bad request or validation error"
 // @Failure 404 {object} map[string]string "Website not found"
-// @Router /api/v1/websites/{id} [put]
+// @Router /websites/{id} [put]
 func (h *WebsiteHandler) UpdateWebsite(c *gin.Context) {
 	idStr := c.Param("id")
 	id, err := strconv.Atoi(idStr)
@@ -163,7 +163,7 @@ func (h *WebsiteHandler) UpdateWebsite(c *gin.Context) {
 // @Success 200 {object} map[string]string "Website deleted successfully"
 // @Failure 400 {object} map[string]string "Invalid website ID"
 // @Failure 404 {object} map[string]string "Website not found"
-// @Router /api/v1/websites/{id} [delete]
+// @Router /websites/{id} [delete]
 func (h *WebsiteHandler) DeleteWebsite(c *gin.Context) {
 	idStr := c.Param("id")
 	id, err := strconv.Atoi(idStr)

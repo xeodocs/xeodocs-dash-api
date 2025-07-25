@@ -4,11 +4,11 @@ definitions:
     properties:
       description:
         type: string
-      freeze_status:
+      freezeStatus:
         type: boolean
-      markdown_content:
+      markdownContent:
         type: string
-      scheduled_publish_at:
+      scheduledPublishAt:
         type: string
       slug:
         type: string
@@ -24,15 +24,15 @@ definitions:
         type: string
       title:
         type: string
-      website_id:
+      websiteId:
         type: integer
     required:
     - description
-    - markdown_content
+    - markdownContent
     - slug
     - status
     - title
-    - website_id
+    - websiteId
     type: object
   models.CreateUserRequest:
     properties:
@@ -56,15 +56,15 @@ definitions:
         type: string
       domain:
         type: string
-      git_api_token:
+      gitApiToken:
         type: string
-      git_repo_branch:
+      gitRepoBranch:
         type: string
-      git_repo_name:
+      gitRepoName:
         type: string
-      git_repo_owner:
+      gitRepoOwner:
         type: string
-      language_code:
+      languageCode:
         type: string
       name:
         type: string
@@ -76,11 +76,11 @@ definitions:
     - config
     - description
     - domain
-    - git_api_token
-    - git_repo_branch
-    - git_repo_name
-    - git_repo_owner
-    - language_code
+    - gitApiToken
+    - gitRepoBranch
+    - gitRepoName
+    - gitRepoOwner
+    - languageCode
     - name
     - slogan
     - slug
@@ -97,26 +97,26 @@ definitions:
     type: object
   models.LoginResponse:
     properties:
-      session_token:
+      sessionToken:
         type: string
       user:
         $ref: '#/definitions/models.User'
     type: object
   models.Page:
     properties:
-      created_at:
+      createdAt:
         type: string
       description:
         type: string
-      freeze_status:
+      freezeStatus:
         type: boolean
       id:
         type: integer
-      last_status_change_at:
+      lastStatusChangeAt:
         type: string
-      markdown_content:
+      markdownContent:
         type: string
-      scheduled_publish_at:
+      scheduledPublishAt:
         type: string
       slug:
         type: string
@@ -126,20 +126,20 @@ definitions:
         type: string
       title:
         type: string
-      updated_at:
+      updatedAt:
         type: string
-      website_id:
+      websiteId:
         type: integer
     type: object
   models.UpdatePageRequest:
     properties:
       description:
         type: string
-      freeze_status:
+      freezeStatus:
         type: boolean
-      markdown_content:
+      markdownContent:
         type: string
-      scheduled_publish_at:
+      scheduledPublishAt:
         type: string
       slug:
         type: string
@@ -171,15 +171,15 @@ definitions:
         type: string
       domain:
         type: string
-      git_api_token:
+      gitApiToken:
         type: string
-      git_repo_branch:
+      gitRepoBranch:
         type: string
-      git_repo_name:
+      gitRepoName:
         type: string
-      git_repo_owner:
+      gitRepoOwner:
         type: string
-      language_code:
+      languageCode:
         type: string
       name:
         type: string
@@ -190,7 +190,7 @@ definitions:
     type: object
   models.User:
     properties:
-      created_at:
+      createdAt:
         type: string
       email:
         type: string
@@ -198,28 +198,28 @@ definitions:
         type: integer
       name:
         type: string
-      updated_at:
+      updatedAt:
         type: string
     type: object
   models.Website:
     properties:
       config:
         type: string
-      created_at:
+      createdAt:
         type: string
       description:
         type: string
       domain:
         type: string
-      git_repo_branch:
+      gitRepoBranch:
         type: string
-      git_repo_name:
+      gitRepoName:
         type: string
-      git_repo_owner:
+      gitRepoOwner:
         type: string
       id:
         type: integer
-      language_code:
+      languageCode:
         type: string
       name:
         type: string
@@ -227,7 +227,7 @@ definitions:
         type: string
       slug:
         type: string
-      updated_at:
+      updatedAt:
         type: string
     type: object
 host: localhost:8080
@@ -242,7 +242,7 @@ info:
   title: XeoDocs Dash API
   version: "1.0"
 paths:
-  /api/v1/auth/login:
+  /auth/login:
     post:
       consumes:
       - application/json
@@ -276,7 +276,7 @@ paths:
       summary: User login
       tags:
       - Authentication
-  /api/v1/auth/logout:
+  /auth/logout:
     post:
       consumes:
       - application/json
@@ -307,7 +307,7 @@ paths:
       summary: User logout
       tags:
       - Authentication
-  /api/v1/auth/me:
+  /auth/me:
     get:
       consumes:
       - application/json
@@ -332,15 +332,15 @@ paths:
       summary: Get current user
       tags:
       - Authentication
-  /api/v1/pages:
+  /pages:
     get:
       consumes:
       - application/json
-      description: Get list of all pages, optionally filtered by website_id
+      description: Get list of all pages, optionally filtered by websiteId
       parameters:
       - description: Filter by website ID
         in: query
-        name: website_id
+        name: websiteId
         type: integer
       produces:
       - application/json
@@ -354,7 +354,7 @@ paths:
               type: array
             type: object
         "400":
-          description: Invalid website_id parameter
+          description: Invalid websiteId parameter
           schema:
             additionalProperties:
               type: string
@@ -401,7 +401,7 @@ paths:
       summary: Create new page
       tags:
       - Pages
-  /api/v1/pages/{id}:
+  /pages/{id}:
     delete:
       consumes:
       - application/json
@@ -516,7 +516,7 @@ paths:
       summary: Update page
       tags:
       - Pages
-  /api/v1/pages/slug/{slug}:
+  /pages/slug/{slug}:
     get:
       consumes:
       - application/json
@@ -547,7 +547,7 @@ paths:
       summary: Get page by slug
       tags:
       - Pages
-  /api/v1/users:
+  /users:
     get:
       consumes:
       - application/json
@@ -605,7 +605,7 @@ paths:
       summary: Create new user
       tags:
       - Users
-  /api/v1/users/{id}:
+  /users/{id}:
     delete:
       consumes:
       - application/json
@@ -720,7 +720,7 @@ paths:
       summary: Update user
       tags:
       - Users
-  /api/v1/websites:
+  /websites:
     get:
       consumes:
       - application/json
@@ -778,7 +778,7 @@ paths:
       summary: Create new website
       tags:
       - Websites
-  /api/v1/websites/{id}:
+  /websites/{id}:
     delete:
       consumes:
       - application/json
@@ -893,7 +893,7 @@ paths:
       summary: Update website
       tags:
       - Websites
-  /api/v1/websites/slug/{slug}:
+  /websites/slug/{slug}:
     get:
       consumes:
       - application/json

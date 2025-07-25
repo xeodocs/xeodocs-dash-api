@@ -62,52 +62,48 @@ func SetupRoutes(db *sql.DB) *gin.Engine {
 		c.Redirect(302, "/swagger/index.html")
 	})
 
-	// API v1 routes
-	v1 := r.Group("/api/v1")
+	// Authentication routes (no auth required)
+	auth := r.Group("/auth")
 	{
-		// Authentication routes (no auth required)
-		auth := v1.Group("/auth")
+		auth.POST("/login", userHandler.Login)
+		auth.POST("/logout", userHandler.Logout)
+		auth.GET("/me", authMiddleware.RequireAuth(), userHandler.GetCurrentUser)
+	}
+
+	// Protected routes (require authentication)
+	protected := r.Group("/")
+	protected.Use(authMiddleware.RequireAuth())
+	{
+		// User routes
+		users := protected.Group("/users")
 		{
-			auth.POST("/login", userHandler.Login)
-			auth.POST("/logout", userHandler.Logout)
-			auth.GET("/me", authMiddleware.RequireAuth(), userHandler.GetCurrentUser)
+			users.GET("", userHandler.GetUsers)
+			users.GET("/:id", userHandler.GetUser)
+			users.POST("", userHandler.CreateUser)
+			users.PUT("/:id", userHandler.UpdateUser)
+			users.DELETE("/:id", userHandler.DeleteUser)
 		}
 
-		// Protected routes (require authentication)
-		protected := v1.Group("/")
-		protected.Use(authMiddleware.RequireAuth())
+		// Website routes
+		websites := protected.Group("/websites")
 		{
-			// User routes
-			users := protected.Group("/users")
-			{
-				users.GET("", userHandler.GetUsers)
-				users.GET("/:id", userHandler.GetUser)
-				users.POST("", userHandler.CreateUser)
-				users.PUT("/:id", userHandler.UpdateUser)
-				users.DELETE("/:id", userHandler.DeleteUser)
-			}
+			websites.GET("", websiteHandler.GetWebsites)
+			websites.GET("/:id", websiteHandler.GetWebsite)
+			websites.GET("/slug/:slug", websiteHandler.GetWebsiteBySlug)
+			websites.POST("", websiteHandler.CreateWebsite)
+			websites.PUT("/:id", websiteHandler.UpdateWebsite)
+			websites.DELETE("/:id", websiteHandler.DeleteWebsite)
+		}
 
-			// Website routes
-			websites := protected.Group("/websites")
-			{
-				websites.GET("", websiteHandler.GetWebsites)
-				websites.GET("/:id", websiteHandler.GetWebsite)
-				websites.GET("/slug/:slug", websiteHandler.GetWebsiteBySlug)
-				websites.POST("", websiteHandler.CreateWebsite)
-				websites.PUT("/:id", websiteHandler.UpdateWebsite)
-				websites.DELETE("/:id", websiteHandler.DeleteWebsite)
-			}
-
-			// Page routes
-			pages := protected.Group("/pages")
-			{
-				pages.GET("", pageHandler.GetPages) // Supports ?website_id=X query param
-				pages.GET("/:id", pageHandler.GetPage)
-				pages.GET("/slug/:slug", pageHandler.GetPageBySlug)
-				pages.POST("", pageHandler.CreatePage)
-				pages.PUT("/:id", pageHandler.UpdatePage)
-				pages.DELETE("/:id", pageHandler.DeletePage)
-			}
+		// Page routes
+		pages := protected.Group("/pages")
+		{
+			pages.GET("", pageHandler.GetPages) // Supports ?websiteId=X query param
+			pages.GET("/:id", pageHandler.GetPage)
+			pages.GET("/slug/:slug", pageHandler.GetPageBySlug)
+			pages.POST("", pageHandler.CreatePage)
+			pages.PUT("/:id", pageHandler.UpdatePage)
+			pages.DELETE("/:id", pageHandler.DeletePage)
 		}
 	}
 
