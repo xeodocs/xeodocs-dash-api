@@ -1,8 +1,10 @@
 package config
 
 import (
+	"log"
 	"os"
-	"strings"
+
+	"github.com/joho/godotenv"
 )
 
 type Config struct {
@@ -13,14 +15,17 @@ type Config struct {
 }
 
 func Load() *Config {
+	// Load .env file
+	err := godotenv.Load()
+	if err != nil {
+		log.Printf("Error loading .env file: %v", err)
+	}
+
 	env := getEnv("ENVIRONMENT", "dev")
 
 	var databaseURL string
 	if env == "prod" {
 		databaseURL = getEnv("TURSO_DB_URL", "")
-		if databaseURL != "" && !strings.HasPrefix(databaseURL, "libsql://") && !strings.HasPrefix(databaseURL, "file://") && !strings.HasPrefix(databaseURL, "https://") && !strings.HasPrefix(databaseURL, "http://") && !strings.HasPrefix(databaseURL, "wss://") && !strings.HasPrefix(databaseURL, "ws://") {
-			databaseURL = "libsql://" + databaseURL
-		}
 	} else {
 		databaseURL = "sqlite://./local/db.db"
 	}
