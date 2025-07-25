@@ -60,4 +60,3 @@ jobs:
           file: ./Dockerfile.production
           push: true
           tags: ${{ env.DOCKER_USERNAME }}/xeodocs-dash-api:latest
-          platforms: linux/amd64,linux/arm64
