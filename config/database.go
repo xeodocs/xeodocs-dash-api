@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	_ "github.com/mattn/go-sqlite3"
+	_ "github.com/tursodatabase/libsql-client-go/libsql"
 )
 
 func InitDatabase(cfg *Config) (*sql.DB, error) {
